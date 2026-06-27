@@ -1,0 +1,5 @@
+exports: A shorthand reference pointing directly to module.exports. require: The local function used to import other dependency modules into the current file. module: An object reference representing the current execution module. 
+
+__filename: The absolute operating system file path of the current module.
+
+__dirname : The absolute operating system directory path containing the current module file.

@@ -43,8 +43,8 @@
 			"typeName": "pointer"
 		},
 		{
-			"x": -166.6486053466797,
-			"y": -17.957870483398438,
+			"x": -169.02323150634766,
+			"y": -16.138891220092773,
 			"z": 1,
 			"meta": {},
 			"id": "camera:page:page",
@@ -59,10 +59,10 @@
 			"typeName": "user"
 		},
 		{
-			"editingShapeId": "shape:vJVcQpnOg3IA-KtTm7-Fk",
+			"editingShapeId": "shape:ukdXvt4xj5Ueg18UET05w",
 			"croppingShapeId": null,
 			"selectedShapeIds": [
-				"shape:vJVcQpnOg3IA-KtTm7-Fk"
+				"shape:ukdXvt4xj5Ueg18UET05w"
 			],
 			"hoveredShapeId": null,
 			"erasingShapeIds": [],
@@ -72,6 +72,48 @@
 			"id": "instance_page_state:page:page",
 			"pageId": "page:page",
 			"typeName": "instance_page_state"
+		},
+		{
+			"x": 223.72928619384766,
+			"y": 169.7500400543213,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:hWP3WqhWbYR5eG5Iu-Orj",
+			"type": "text",
+			"props": {
+				"color": "blue",
+				"size": "s",
+				"w": 177.4322967529297,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "EventEmitter class"
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "a4I6A",
+			"typeName": "shape"
 		},
 		{
 			"x": 222.18607711791992,
@@ -113,6 +155,144 @@
 			},
 			"parentId": "page:page",
 			"index": "a2TUL",
+			"typeName": "shape"
+		},
+		{
+			"x": 422.03175354003906,
+			"y": 167.8210391998291,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:mw6Al9C4agiAyc9-co7aK",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 438.4879455566406,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "in the events module is used to handle events "
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "a5n22",
+			"typeName": "shape"
+		},
+		{
+			"x": 876.1212615966797,
+			"y": 167.43523597717285,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:sa7y7nJsWyjysoOnAW-nY",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 90.83169555664062,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "in Node.js"
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "a6yAr",
+			"typeName": "shape"
+		},
+		{
+			"x": 651.9700469970703,
+			"y": 135.41362953186035,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:KNg0851bZYcv1xE7AEYqh",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 463.55908203125,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "where actions (events) trigger specific responses."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "a3sZv",
 			"typeName": "shape"
 		},
 		{
@@ -175,7 +355,7 @@
 			"followingUserId": null,
 			"opacityForNextShape": 1,
 			"stylesForNextShape": {
-				"tldraw:color": "black",
+				"tldraw:color": "yellow",
 				"tldraw:size": "s"
 			},
 			"brush": null,
@@ -219,6 +399,260 @@
 			"id": "instance:instance",
 			"currentPageId": "page:page",
 			"typeName": "instance"
+		},
+		{
+			"x": 243.850830078125,
+			"y": 326.4958801269531,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:pZEjYJNChqP-ddNVPOoSY",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "m",
+				"w": 204.9267578125,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "why use events?"
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "a8M22",
+			"typeName": "shape"
+		},
+		{
+			"x": 248.8662567138672,
+			"y": 377.8076171875,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:AGQkXQXPdaAfZBBvxwg9t",
+			"type": "text",
+			"props": {
+				"color": "yellow",
+				"size": "s",
+				"w": 746.195556640625,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": ".Helps in asynchronous programming without callback hell."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": ".Used heavily in real-time applications like chat apps, notifications and streams."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": ". Core modules like Fs , http , and stream use events internally"
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "a9qUD",
+			"typeName": "shape"
+		},
+		{
+			"x": 264.2983627319336,
+			"y": 536.7582397460938,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:ukdXvt4xj5Ueg18UET05w",
+			"type": "text",
+			"props": {
+				"color": "yellow",
+				"size": "s",
+				"w": 224.1385040283203,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "two types of events :- "
+								}
+							]
+						},
+						{
+							"type": "orderedList",
+							"attrs": {
+								"dir": "auto",
+								"start": 1,
+								"type": null
+							},
+							"content": [
+								{
+									"type": "listItem",
+									"attrs": {
+										"dir": "auto"
+									},
+									"content": [
+										{
+											"type": "paragraph",
+											"attrs": {
+												"dir": "auto"
+											},
+											"content": [
+												{
+													"type": "text",
+													"text": "multi callable events"
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"attrs": {
+										"dir": "auto"
+									},
+									"content": [
+										{
+											"type": "paragraph",
+											"attrs": {
+												"dir": "auto"
+											},
+											"content": [
+												{
+													"type": "text",
+													"text": "single callable events"
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "aAdiv",
+			"typeName": "shape"
+		},
+		{
+			"x": 222.57188034057617,
+			"y": 195.5988254547119,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:tMq64G6SCG_K3dtOpAzU-",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 661.4818115234375,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": ". Events in Node.js work like a publisher-subscriber model"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "where an event is emitted and event-listeners(handlers)respond to it."
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "a7uRX",
+			"typeName": "shape"
 		}
 	]
 }

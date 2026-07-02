@@ -1,0 +1,38 @@
+HTTP Server 
+(Hypertext Transfer Protocol) 
+
+Whenever talk about api , internet or severs  there are two components 
+
+
+Client --------------------------------Server
+   |                                      |
+   |                                       
+   |
+   |
+(computer,macBook etc.)         (machine connected to internet having a public ip address , public facing static ip address (amazon aws etc. or it can be (bare metal )->server at our office)
+
+
+        Request(i want this , i want that etc.)
+Client ------------------------------------>Server
+       <------------------------------------   |
+          Response                             |
+                                               |
+                 Responsible to fulffil(processing) this request(get,put,patch,delete any kind of request)
+                            |
+                            |
+                            |
+                        Processing
+                    -Authenticate(client is allowed to acess particular resource )
+                    -Authorization(if there is authority )
+                    -Validation
+                    -Process(can be of database operation)------
+                                    |
+                                    |
+                            (NoSql,Sql,Postgress)
+        
+               
+               
+               Request Response Cycle
+
+
+        Rest of the code is in notebook!

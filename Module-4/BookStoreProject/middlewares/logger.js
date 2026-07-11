@@ -1,0 +1,6 @@
+const fs = require('node:fs') ; 
+exports.loggermiddleware= function(req,res,next){
+    const log = `[${Date.now()}] ${req.method} ${req.path}`
+    fs.appendFileSync('log.txt',log,"utf-8") ; 
+    next() ; 
+}

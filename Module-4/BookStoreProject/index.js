@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("node:fs") ; 
 
 const app = express();
 const PORT = 8000;
@@ -18,66 +19,89 @@ const Books = [
   { id: 11, title: "Title-11", author: "Author-11" },
 ];
 
+app.use(express.json()); // middleware (Pluggins)
+// app.use(function (req, res, next) {
+//   console.log("manually created middleware A");
+//   // if want to return from here
+//   // return res.json({message:"Not Authorized to access"}) ;
+//   next(); // go to next middleware if present or route
+// });
+// app.use(function (req, res, next) {
+//   console.log("manually created middleware B");
+//   // if want to return from here
+//   return res.json({ message: "Not Authorized to access after middleware B" });
+//   next(); // go to next middleware if present or route
+// });
+// 
 
-app.use(express.json()) // middleware (Pluggins)
+// middleware for partiular route
+// app.use('/books',(req,res,next)=>{}) // run for every request(PUT,POST,PATCH or any request on /boooks route) ; 
 
+app.use((req,res,next)=>{
+    const log = `[${Date.now()}] ${req.method} ${req.path}`
+    fs.appendFileSync('log.txt',log,"utf-8") ; 
+    next() ; 
+})
 app.get("/", (req, res) => {
+  console.dir(res.app.get("view engine"));
+  console.dir(res.app === req.app);
   res.end("Homepage");
 });
 
-app.get('/api/books',(req,res)=>{
-    res.setHeader('x-uthor','shubham rohilla') ; 
-    return res.status(200).json({Books}); 
-})
+app.get("/api/books", (req, res) => {
+  res.setHeader("x-uthor", "shubham rohilla");
+  return res.status(200).json({ Books });
+});
 
-app.get('/api/books/:id',(req,res)=>{
-    const id = parseInt(req.params.id) ; // instead of this we can also do 
-    const book = Books.find(e => e.id === id) ; // e.id == id // dont strict check
+app.get("/api/books/:id", (req, res) => {
+  const id = parseInt(req.params.id); // instead of this we can also do
+  const book = Books.find((e) => e.id === id); // e.id == id // dont strict check
 
-    if(isNaN(id)){
-        return res.status(400).json({error : "id must be a number"}) ;
-    }
+  if (isNaN(id)) {
+    return res.status(400).json({ error: "id must be a number" });
+  }
 
-    if(!book){
-        return res.status(404).json({error : `Book with ${id} is not exists`}) ; 
-    }
-     return res.status(202).json(book) ; 
-})
+  if (!book) {
+    return res.status(404).json({ error: `Book with ${id} is not exists` });
+  }
+  return res.status(202).json(book);
+});
 
-app.post('/api/books',(req,res)=>{
-    const{title,author}  = req.body ; 
+app.post("/api/books", (req, res) => {
+  const { title, author } = req.body;
 
-    if(!title || title === '') return res.status(400).json({error:"title is required"}) ;
+  if (!title || title === "")
+    return res.status(400).json({ error: "title is required" });
 
-    
-    if(!author || author === '') return res.status(400).json({error:"author is required"}) ;
+  if (!author || author === "")
+    return res.status(400).json({ error: "author is required" });
 
-    const id = Books.length ; 
-    const book = {id, title , author} ; 
+  const id = Books.length;
+  const book = { id, title, author };
 
-    Books.push(book) ; 
+  Books.push(book); //can perform database operation
 
-    return res.status(201).json({message : "Book is created added to database",id})
+  return res
+    .status(201)
+    .json({ message: "Book is created added to database", id });
+});
+app.delete("/api/books/:id", (req, res) => {
+  const id = parseInt(req.params.id);
 
-})
-app.delete('/api/books/:id',(req,res)=>{
-    const id = parseInt(req.params.id) ; 
+  if (isNaN(id))
+    return res
+      .status(400)
+      .json({ error: `id must be of type number your id is ${id}` });
 
-    if(isNaN(id)) return res.status(400).json({error: `id must be of type number your id is ${id}`}) ; 
+  const idToDelete = Books.find((e) => e.id === id);
 
-    const idToDelete = Books.find(e => e.id === id) ; 
+  if (!idToDelete)
+    return res.status(404).json({ error: `Book with ${id} does not exists` });
 
+  Books.slice(idToDelete, 1);
 
-
-    if(!idToDelete) return res.status(404).json({error :`Book with ${id} does not exists`}) ; 
-
-    Books.slice(idToDelete,1) ; 
-
-    return res.status(200).json({message:"book deleted"}) ; 
-
-
-
-})
+  return res.status(200).json({ message: "book deleted" });
+});
 app.listen(PORT, (req, res) => {
   console.log(`Server is running sucessfully on port${PORT}`);
 });

@@ -1,0 +1,32 @@
+Semantic versioning of modules or dependencies 
+
+built using 3 numbers also known as BITS 
+
+x1.x2.x3   -> express: "5.2.1" --> major -> 5 , minor--> 2 and patch --> 1
+
+
+case 1 : Some minor bug fix which is not important (optional)-----> always increase patch numbers
+PATCH Version:  Incremented for backward-compatible bug fixes.
+                These updates address issues without adding new 
+                functionality or breaking anything. For instance,
+                1.2.3 to 1.2.4 signals a bug fix that doesn't affect compatibility.
+
+case 2 : Added a new feature but old feature also work 
+        1. There is new feature 
+        2. Nothing will break ----> minor
+
+MINOR Version : Incremented when new functionality is added in added in a 
+                backward compatibility way. This means that existing code should
+                continue to work, but new features are available .For example
+                , 1.2.0 to 1.3.0 suggests that new features are introduced without breaking compatibility. 
+
+case 3 : Breaking Change then we have to change our major version 
+
+MAJOR Version : Incremented when there are incompatible API changes.
+                These changes may break existing functionality or require
+                modifications in dependent code. For example ,1.0.0 to 2.0.0
+                indicates a significant change that may require users to update their code.
+
+
+~4.2.1 in this ~ specify that if in future there is new patch version i will update that [~from 4.2.1 --> 4.2.x]
+^4.2.1 means from 4.2.1 -> < 5.0.0 feel free to update means 4 bit or major change is frozen

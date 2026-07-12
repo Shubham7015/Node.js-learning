@@ -8,6 +8,7 @@ const app = express();
 const PORT = 8000;
 
 app.use(express.json()); // middleware (Pluggins)
+app.use(loggermiddleware) ; 
 
 // app.use(function (req, res, next) {
 //   console.log("manually created middleware A");

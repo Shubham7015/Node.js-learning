@@ -43,9 +43,9 @@
 			"typeName": "pointer"
 		},
 		{
-			"x": -169.02323150634766,
-			"y": -16.138891220092773,
-			"z": 1,
+			"x": 219.22021607652852,
+			"y": 97.44514636653298,
+			"z": 0.7179117662128988,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -59,10 +59,10 @@
 			"typeName": "user"
 		},
 		{
-			"editingShapeId": "shape:ukdXvt4xj5Ueg18UET05w",
+			"editingShapeId": null,
 			"croppingShapeId": null,
 			"selectedShapeIds": [
-				"shape:ukdXvt4xj5Ueg18UET05w"
+				"shape:tMq64G6SCG_K3dtOpAzU-"
 			],
 			"hoveredShapeId": null,
 			"erasingShapeIds": [],
@@ -74,8 +74,8 @@
 			"typeName": "instance_page_state"
 		},
 		{
-			"x": 223.72928619384766,
-			"y": 169.7500400543213,
+			"x": 234.50242258880053,
+			"y": 168.38136249821576,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -354,14 +354,11 @@
 		{
 			"followingUserId": null,
 			"opacityForNextShape": 1,
-			"stylesForNextShape": {
-				"tldraw:color": "yellow",
-				"tldraw:size": "s"
-			},
+			"stylesForNextShape": {},
 			"brush": null,
 			"scribbles": [],
 			"cursor": {
-				"type": "default",
+				"type": "move",
 				"rotation": 0
 			},
 			"isFocusMode": false,
@@ -372,7 +369,7 @@
 				"x": 0,
 				"y": 0,
 				"w": 1263.503173828125,
-				"h": 690.9722290039062
+				"h": 493.8271789550781
 			},
 			"insets": [
 				false,
@@ -401,8 +398,8 @@
 			"typeName": "instance"
 		},
 		{
-			"x": 243.850830078125,
-			"y": 326.4958801269531,
+			"x": 263.2222668986086,
+			"y": 363.2822855787828,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -443,8 +440,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 248.8662567138672,
-			"y": 377.8076171875,
+			"x": 256.4149719996261,
+			"y": 402.2339046712084,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -509,8 +506,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 264.2983627319336,
-			"y": 536.7582397460938,
+			"x": 269.6975347929207,
+			"y": 488.09878232312576,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -601,8 +598,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 222.57188034057617,
-			"y": 195.5988254547119,
+			"x": 230.683199786753,
+			"y": 191.78669873011492,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,

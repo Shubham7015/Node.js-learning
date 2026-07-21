@@ -1,57 +1,94 @@
-const {BOOKS} = require('../models/book')
+const { eq, ilike } = require("drizzle-orm");
+const booksTable = require("../models/book.model.js");
+const authorsTable = require('../models/author.model.js') ; 
+const db = require("../db/index.js");
 
-exports.getAllBooks = (req, res) => {
-  res.setHeader("x-uthor", "shubham rohilla");
-  return res.status(200).json({ BOOKS });
-}
+// Controller to fetch all books or search books by title.
+exports.getAllBooks = async (req, res) => {
+  try {
+    // Set a custom header for auditing or identification.
+    res.setHeader("x-uthor", "shubham rohilla");
 
-exports.getBookById = (req, res) => {
-  const id = parseInt(req.params.id); // instead of this we can also do
-  const book = BOOKS.find((e) => e.id === id); // e.id == id // dont strict check
+    // Read the optional search query parameter.
+    const search = req.query.search; // ?search=node in url then it returns -> search
 
-  if (isNaN(id)) {
-    return res.status(400).json({ error: "id must be a number" });
+    if (search) {
+      // Use full text search on the title field when search is provided.
+      const books = await db
+        .select()
+        .from(booksTable)
+        .where(
+          sql`to_tsvector('english', ${booksTable.title}) @@ to_tsquery('english', ${search})`,
+        );
+      return res.status(200).json({ books });
+    }
+
+    // Return all books when no search term is provided.
+    const books = await db.select().from(booksTable);
+    console.log(search);
+    return res.status(200).json({ books });
+  } catch (error) {
+    console.error(`getAllBooks failed : ${error}`);
+    return res.status(500).json({ error: "failed to fetch books" });
   }
+};
 
-  if (!book) {
-    return res.status(404).json({ error: `Book with ${id} is not exists` });
+// Controller to fetch a single book by its id.
+exports.getBookById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Query the books table for a record matching the provided id.
+    const [book] = await db
+      .select()
+      .from(booksTable)
+      .where(eq(booksTable.id, id))
+      .leftJoin(authorsTable,eq(booksTable.authorId,authorsTable.id)) 
+      .limit(1);
+
+    if (!book) {
+      return res.status(404).json({ error: `Book with ${id} is not exists` });
+    }
+    return res.status(202).json(book);
+  } catch (error) {
+    console.error(`getBookById failed : ${error}`);
+    return res.status(500).json({ error: "failed to fetch book" });
   }
-  return res.status(202).json(book);
-}
+};
 
-exports.addBook = (req, res) => {
-  const { title, author } = req.body;
+// Controller to add a new book record.
+exports.addBook = async (req, res) => {
+  try {
+    const { title, description, authorId } = req.body;
 
-  if (!title || title === "")
-    return res.status(400).json({ error: "title is required" });
+    // Validate required title field before inserting.
+    if (!title || title === "")
+      return res.status(400).json({ error: "title is required" });
 
-  if (!author || author === "")
-    return res.status(400).json({ error: "author is required" });
+    const [result] = await db
+      .insert(booksTable)
+      .values({
+        title,
+        description,
+        authorId,
+      })
+      .returning({ id: booksTable.id });
 
-  const id = BOOKS.length;
-  const book = { id, title, author };
-
-  BOOKS.push(book); //can perform database operation
-
-  return res
-    .status(201)
-    .json({ message: "Book is created added to database", id });
-}
-
-exports.deleteBookById = (req, res) => {
-  const id = parseInt(req.params.id);
-
-  if (isNaN(id))
     return res
-      .status(400)
-      .json({ error: `id must be of type number your id is ${id}` });
+      .status(201)
+      .json({ message: `Book created successfully with id:${result.id}` });
+  } catch (error) {
+    console.error(`addBook failed  : ${error}`);
+    return res.status(500).json({ error: "failed to add book" });
+  }
+};
 
-  const idToDelete = BOOKS.find((e) => e.id === id);
+// Controller to delete a book by its id.
+exports.deleteBookById = async (req, res) => {
+  const id = req.params.id;
 
-  if (!idToDelete)
-    return res.status(404).json({ error: `Book with ${id} does not exists` });
-
-  BOOKS.slice(idToDelete, 1);
+  // Delete the record from the books table with the matching id.
+  await db.delete(booksTable).where(eq(booksTable.id, id));
 
   return res.status(200).json({ message: "book deleted" });
-}
+};

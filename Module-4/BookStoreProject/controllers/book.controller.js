@@ -1,4 +1,4 @@
-const { eq, ilike } = require("drizzle-orm");
+const { eq, ilike ,sql } = require("drizzle-orm");
 const booksTable = require("../models/book.model.js");
 const authorsTable = require('../models/author.model.js') ; 
 const db = require("../db/index.js");
@@ -7,7 +7,7 @@ const db = require("../db/index.js");
 exports.getAllBooks = async (req, res) => {
   try {
     // Set a custom header for auditing or identification.
-    res.setHeader("x-uthor", "shubham rohilla");
+    res.setHeader("x-author", "shubham rohilla");
 
     // Read the optional search query parameter.
     const search = req.query.search; // ?search=node in url then it returns -> search
@@ -18,7 +18,7 @@ exports.getAllBooks = async (req, res) => {
         .select()
         .from(booksTable)
         .where(
-          sql`to_tsvector('english', ${booksTable.title}) @@ to_tsquery('english', ${search})`,
+          sql`to_tsvector('english', ${booksTable.title}) @@ plainto_tsquery('english', ${search})`,
         );
       return res.status(200).json({ books });
     }

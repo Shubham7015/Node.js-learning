@@ -1,0 +1,19 @@
+{
+  "name": "authentication-01",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Shubham Rohilla",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+   "start": "node --watch index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.1.1"
+  }
+}

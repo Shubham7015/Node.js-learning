@@ -3,6 +3,8 @@ import db from "../db/index.js";
 import { usersTable, userSessions } from "../db/schema.js";
 import { eq } from "drizzle-orm";
 import { randomBytes, createHmac } from "node:crypto";
+import jwt from 'jsonwebtoken'
+import 'dotenv/config'
 
 
 const router = express.Router();
@@ -65,11 +67,12 @@ router.post("/sign-up", async (req, res) => {
 // Login route placeholder
 router.post("/login", async (req, res) => {
   try {
-    const { email, password: plainPassword } = req.body;
+    const { email,password } = req.body;
 
-    const [user] = await db
+    const [existingUser] = await db
       .select({
         id: usersTable.id,
+        name: usersTable.name,
         email: usersTable.email,
         salt: usersTable.salt,
         password: usersTable.password,
@@ -77,29 +80,31 @@ router.post("/login", async (req, res) => {
       .from(usersTable)
       .where(eq(usersTable.email, email));
 
-    if (!user) {
+    if (!existingUser) {
       return res
         .status(400)
-        .json({ error: `User with ${email} does not exist` });
+        .json({ error: `User with ${email} does not exists` });
     }
 
-    const { salt, password } = user;
+    const salt = existingUser.salt ;
+    const existingHash = existingUser.password ; 
 
-    const hashedPassword = createHmac("sha256", salt)
-      .update(plainPassword)
-      .digest("hex");
+    const newHash = createHmac('sha256',salt).update(password).digest('hex') ;
 
-    if (hashedPassword !== password) {
+    if (newHash !== existingHash) {
       return res.status(401).json({ message: "password is incorrect" });
     }
 
-    const [session] = await db
-      .insert(userSessions)
-      .values({
-        userId: user.id,
-      })
-      .returning({ id: userSessions.id });
-    return res.status(200).json({ status: "success", sessionId: session.id });
+      // What data we want to store in the payload 
+    const payload = {
+      id: existingUser.id ,
+      name:existingUser.name,
+      email:existingUser.email
+    }
+
+    const token = jwt.sign(payload,process.env.JWT_SECRET) ; // make a token for particular data using JWT_SECRET
+    return res.status(200).json({status:'success',token}) ; // return the token
+
   } catch (error) {
     console.error(`login failed: ${error}`);
     return res.status(500).json({ error: "failed to log in" });

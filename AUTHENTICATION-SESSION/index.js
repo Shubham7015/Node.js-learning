@@ -1,33 +1,30 @@
+import "dotenv/config"
 import express from "express";
-import db from "./db/index.js";
-import { usersTable, userSessions } from "./db/schema.js";
-import { eq } from "drizzle-orm";
 import userRouter from "./routes/user.routes.js";
+import jwt from 'jsonwebtoken'
+
 
 const app = express();
 app.use(express.json());
 app.use(async (req, res, next) => {
-  const sessionId = req.headers["session-id"];
-  if (!sessionId) return next();
+  const tokenHeader = req.headers["authorization"];
+  // Header authorization: Bearer <TOKEN>
+  if (!tokenHeader) return next();
 
   try {
-    const [data] = await db
-      .select({
-        sessionId: userSessions.id,
-        userId: userSessions.userId,
-        name: usersTable.name,
-        email: usersTable.email,
-      })
-      .from(userSessions)
-      .innerJoin(usersTable, eq(usersTable.id, userSessions.userId))
-      .where(eq(userSessions.id, sessionId));
+    if (!tokenHeader.startsWith('Bearer'))
+      return res
+        .status(400)
+        .json({ error: "Authorization header must start with bearer" });
+      
+    const token = tokenHeader.split(' ')[1] ;  
 
-    if (!data) return next();
 
-    req.user = data ;
-    next();
+    const decodedToken = jwt.verify(token,process.env.JWT_SECRET) ;
+    req.user = decodedToken ; 
+    next() ; 
   } catch (error) {
-    console.error(`session lookup failed: ${error}`);
+    console.error(`Authentication token not matched: ${error}`);
     next(); // treat as unauthenticated rather than crashing the request
   }
 });

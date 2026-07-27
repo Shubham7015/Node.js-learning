@@ -5,14 +5,13 @@ import { eq } from "drizzle-orm";
 import { randomBytes, createHmac } from "node:crypto";
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
+import { ensureAuthenticated } from "../middlewares/auth.middleware.js";
 
 
 const router = express.Router();
 
-router.patch('/',async(req,res)=>{
+router.patch('/',ensureAuthenticated,async(req,res)=>{
   const user = req.user ; 
-
-  if(!user) return res.status(401).json({error:"You are not logged in"});
 
   const {name} = req.body;
 
@@ -22,9 +21,8 @@ router.patch('/',async(req,res)=>{
 })
 
 // Placeholder route for root user routes
-router.get("/", async (req, res) => {
+router.get("/",ensureAuthenticated, async (req, res) => {
    const user = req.user ;
-   if(!user) return res.status(401).json({ error: "You are not logged in" });
    return res.status(200).json({user}) ;
 });
 
@@ -74,6 +72,7 @@ router.post("/login", async (req, res) => {
         id: usersTable.id,
         name: usersTable.name,
         email: usersTable.email,
+        role:usersTable.role,
         salt: usersTable.salt,
         password: usersTable.password,
       })
@@ -99,6 +98,7 @@ router.post("/login", async (req, res) => {
     const payload = {
       id: existingUser.id ,
       name:existingUser.name,
+      role:existingUser.role,
       email:existingUser.email
     }
 

@@ -1,6 +1,7 @@
 import "dotenv/config"
 import express from "express";
 import userRouter from "./routes/user.routes.js";
+import adminRouter from "./routes/admin.routes.js";
 import jwt from 'jsonwebtoken'
 
 
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRouter);
+app.use("/admin", adminRouter);
 
 app.listen(PORT, () =>
   console.log(`Server is running successfully on PORT: ${PORT}`),

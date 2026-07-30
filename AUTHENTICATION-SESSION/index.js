@@ -1,34 +1,14 @@
 import "dotenv/config"
 import express from "express";
 import userRouter from "./routes/user.routes.js";
-import adminRouter from "./routes/admin.routes.js";
-import jwt from 'jsonwebtoken'
+import adminRouter from './routes/admin.routes.js'
+import { authenticationMiddleware } from "./middlewares/auth.middleware.js";
 
 
 const app = express();
 app.use(express.json());
-app.use(async (req, res, next) => {
-  const tokenHeader = req.headers["authorization"];
-  // Header authorization: Bearer <TOKEN>
-  if (!tokenHeader) return next();
 
-  try {
-    if (!tokenHeader.startsWith('Bearer'))
-      return res
-        .status(400)
-        .json({ error: "Authorization header must start with bearer" });
-      
-    const token = tokenHeader.split(' ')[1] ;  
-
-
-    const decodedToken = jwt.verify(token,process.env.JWT_SECRET) ;
-    req.user = decodedToken ; 
-    next() ; 
-  } catch (error) {
-    console.error(`Authentication token not matched: ${error}`);
-    next(); // treat as unauthenticated rather than crashing the request
-  }
-});
+app.use(authenticationMiddleware);
 
 const PORT = process.env.PORT ?? 8000;
 

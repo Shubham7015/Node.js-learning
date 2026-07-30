@@ -52,7 +52,7 @@ export const pets: pet[] = [
     name: "Bob",
     species: "dog",
     breed: "PitBull",
-    adopted: false,
+    adopted: true,
     age: 25,
     intakeDate: new Date("2024-06-15"),
     medicalRecord: {
@@ -66,7 +66,7 @@ export const pets: pet[] = [
     name: "Jerr",
     species: "rat",
     breed: "sypher",
-    adopted: false,
+    adopted: true,
     age: 8,
     intakeDate: new Date("2024-01-01"),
     adoptionDate: new Date("2024-02-15"),

@@ -2,6 +2,7 @@ import express from "express";
 import type { Express, Request, Response } from "express";
 import { pets, type pet } from "./db/pets.js";
 import cors from "cors";
+import { json } from "node:stream/consumers";
 
 const app: Express = express();
 app.use(cors());
@@ -9,28 +10,37 @@ app.use(cors());
 const PORT: number = 8000;
 
 type PetQueryParams = {
-    species?:string,
-    adopted?:boolean,
-}
+  species?: string;
+  adopted?: "true" | "false";
+};
 
 app.get(
   "/",
   (
-    req: Request<{}, unknown, {},PetQueryParams>,
-    res: Response<pet[] | { message: "Pet with current species not found" }>,
+    req: Request<{}, unknown, {}, PetQueryParams>,
+    res: Response<pet[] | { message: string }>,
   ): Response | void => {
-    const species = String(req.query.species).toLowerCase();
+    const { adopted, species } = req.query;
+    let filteredArray: pet[] = pets;
+
     if (species) {
-      const new_pet = pets.filter(
+      filteredArray = filteredArray.filter(
         (obj: pet): boolean => obj.species.toLowerCase() === species,
       );
-      if (new_pet.length == 0)
-        return res
-          .status(404)
-          .json({ message: "Pet with current species not found" });
-      return res.json(new_pet);
     }
-    return res.status(200).json(pets);
+
+    if (adopted) {
+      const isAdopted: boolean = adopted === "true";
+      filteredArray = filteredArray.filter(
+        (obj: pet): boolean => obj.adopted === isAdopted,
+      );
+    }
+
+    if (filteredArray.length === 0) {
+      return res.status(404).json({ message: "No pets found matching the given filters" });
+    }
+
+    return res.status(200).json(filteredArray);
   },
 );
 app.get(

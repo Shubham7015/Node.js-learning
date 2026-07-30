@@ -21,7 +21,8 @@ Node.js/
 │   └── BookStoreProject/  # Full REST API with middleware, Drizzle ORM & PostgreSQL
 ├── MODULES/               # CommonJS module system (require / exports)
 ├── Authentication-01/     # Token-based auth (in-memory, no DB)
-├── AUTHENTICATION-SESSION/# Session-based auth with JWT, Drizzle ORM & PostgreSQL
+├── AUTHENTICATION-SESSION/# JWT auth with role-based access, Drizzle ORM & PostgreSQL
+├── ExpressWithTypeScript/ # Express 5 + TypeScript — Pets API with MVC architecture
 └── NODE-ORM-1/            # Drizzle ORM basics with PostgreSQL
 ```
 
@@ -119,29 +120,72 @@ A simple Express server demonstrating authentication basics **without a database
 
 ---
 
-### `AUTHENTICATION-SESSION` — Session-Based Auth with JWT & DB
+### `AUTHENTICATION-SESSION` — JWT Auth with Role-Based Access Control
 
-A production-style authentication system with a proper layered architecture:
+A production-style authentication system with JWT tokens and role-based authorization:
 
 ```
 AUTHENTICATION-SESSION/
-├── controllers/      # Auth & business logic
-├── db/               # Drizzle ORM DB connection & schema
-├── drizzle/          # Migration files
-├── middlewares/      # Session validation middleware
-├── models/           # Data models
-├── routes/           # Express route definitions
-├── views/            # View templates
+├── db/
+│   ├── index.js          # PostgreSQL connection pool (Drizzle + pg)
+│   └── schema.js         # Users table (with role enum) & sessions table
+├── drizzle/              # Migration files
+├── middlewares/
+│   └── auth.middleware.js # JWT auth, ensureAuthenticated, restrictToRole
+├── routes/
+│   ├── user.routes.js    # Sign-up, login, get/update profile
+│   └── admin.routes.js   # Admin-only: list all users
 ├── docker-compose.yml
-└── index.js          # App entry point with session middleware
+├── drizzle.config.js
+└── index.js              # App entry point with global JWT middleware
 ```
 
-- **Session middleware** — Looks up `session-id` header, joins `userSessions` ↔ `usersTable` via Drizzle ORM, attaches user data to `req.user`
-- **Database** — PostgreSQL via Drizzle ORM + Docker Compose
-- **Auth** — JWT (`jsonwebtoken` package)
-- **Package manager** — pnpm
+#### Auth Flow
 
-**Tech stack:** Express 5, Drizzle ORM, PostgreSQL, JWT, Docker, pnpm.
+1. **`POST /user/sign-up`** — Register with name, email, password (hashed with HMAC-SHA256 + random salt)
+2. **`POST /user/login`** — Authenticate → receive a JWT token containing `id`, `name`, `role`, `email`
+3. **`GET /user`** — Get profile (requires JWT via `ensureAuthenticated` middleware)
+4. **`PATCH /user`** — Update name (requires JWT)
+5. **`GET /admin`** — List all users (requires JWT + authenticated user)
+
+#### Middlewares
+
+| Middleware | Purpose |
+|---|---|
+| `authenticationMiddleware` | Global — parses `Authorization: Bearer <token>`, attaches decoded payload to `req.user` |
+| `ensureAuthenticated` | Route-level — returns 401 if `req.user` is not set |
+| `restrictToRole(role)` | Route-level — returns 401 if user's role doesn't match |
+
+#### Database Schema
+
+- **`users`** — `id` (UUID), `name`, `email` (unique), `role` (USER/ADMIN enum), `password`, `salt`
+- **`user_sessions`** — `id` (UUID), `userId` (FK → users), `createdAt`
+
+**Tech stack:** Express 5, Drizzle ORM, PostgreSQL 17, JWT, Docker, pnpm.
+
+---
+
+### `ExpressWithTypeScript` — Pets API (Express 5 + TypeScript)
+
+A RESTful Pets API with a clean MVC-style architecture, fully typed with TypeScript:
+
+```
+ExpressWithTypeScript/
+├── src/
+│   ├── controllers/pet.controller.ts    # getpets, getpetbyid handlers
+│   ├── db/pets.ts                       # In-memory pet data & type definitions
+│   ├── middlewares/pets.middleware.ts   # validateNumberById, validateAuthentication
+│   ├── routes/pets.route.ts            # Route definitions for /pets
+│   └── index.ts                        # App entry point
+├── package.json
+└── tsconfig.json
+```
+
+- **`GET /pets`** — List pets with chainable filters: `species`, `adopted`, `minAge`, `maxAge`
+- **`GET /pets/:id?password=please`** — Get pet by ID (requires password query param + numeric ID validation)
+- **404 catch-all** for unknown routes
+
+**Tech stack:** Express 5, TypeScript 7, Node 24+, CORS.
 
 ---
 
@@ -164,7 +208,8 @@ A standalone project to learn Drizzle ORM fundamentals:
 | Technology | Used In |
 |-----------|---------|
 | **Node.js** | All modules |
-| **Express.js** (v5) | Module-4, Authentication-01, AUTHENTICATION-SESSION |
+| **Express.js** (v5) | Module-4, Authentication-01, AUTHENTICATION-SESSION, ExpressWithTypeScript |
+| **TypeScript** (v7) | ExpressWithTypeScript |
 | **Drizzle ORM** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
 | **PostgreSQL** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
 | **Docker / Docker Compose** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
@@ -224,7 +269,8 @@ npm start          # or: pnpm start
 6. **NODE-ORM-1** — Drizzle ORM basics
 7. **Module-4 / BookStoreProject** — Full REST API
 8. **Authentication-01** — Auth fundamentals
-9. **AUTHENTICATION-SESSION** — Production-style session auth
+9. **AUTHENTICATION-SESSION** — JWT auth with role-based access
+10. **ExpressWithTypeScript** — Express + TypeScript with MVC architecture
 
 ---
 

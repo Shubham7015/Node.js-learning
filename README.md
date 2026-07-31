@@ -1,6 +1,6 @@
 # 📚 Node.js Learning
 
-A hands-on, module-by-module journey through **Node.js** — from core fundamentals like the file system and events, all the way to building REST APIs with Express, integrating PostgreSQL via Drizzle ORM, and implementing authentication with sessions and JWT.
+A hands-on, module-by-module journey through **Node.js** — from core fundamentals like the file system and events, all the way to building REST APIs with Express, integrating databases (PostgreSQL via Drizzle ORM & MongoDB via Mongoose), and implementing authentication with sessions and JWT.
 
 ---
 
@@ -23,7 +23,8 @@ Node.js/
 ├── Authentication-01/     # Token-based auth (in-memory, no DB)
 ├── AUTHENTICATION-SESSION/# JWT auth with role-based access, Drizzle ORM & PostgreSQL
 ├── ExpressWithTypeScript/ # Express 5 + TypeScript — Pets API with MVC architecture
-└── NODE-ORM-1/            # Drizzle ORM basics with PostgreSQL
+├── NODE-ORM-1/            # Drizzle ORM basics with PostgreSQL
+└── MongoDB/               # MongoDB + Mongoose — User Auth API with JWT
 ```
 
 ---
@@ -203,6 +204,39 @@ A standalone project to learn Drizzle ORM fundamentals:
 
 ---
 
+### `MongoDB` — User Authentication API (MongoDB + Mongoose)
+
+A RESTful authentication API using **MongoDB** with **Mongoose** as the ODM:
+
+```
+MongoDB/
+├── index.js                    # App entry point — Express server setup
+├── connection.js               # MongoDB connection helper (Mongoose)
+├── models/
+│   └── user.model.js           # User schema (name, email, password, salt)
+├── routes/
+│   └── user.route.js           # User routes — signup, login, update profile
+└── middlewares/
+    └── auth.middleware.js      # JWT auth middleware & route guard
+```
+
+#### Auth Flow
+
+1. **`POST /user/signup`** — Register with name, email, password (hashed with HMAC-SHA256 + random salt)
+2. **`POST /user/login`** — Authenticate → receive a JWT token
+3. **`PATCH /user`** — Update name (requires JWT via `ensureAuthenticated` middleware)
+
+#### Middlewares
+
+| Middleware | Purpose |
+|---|---|
+| `authValidation` | Global — parses `Authorization: Bearer <token>`, attaches decoded payload to `req.user` |
+| `ensureAuthenticated` | Route-level — returns 401 if `req.user` is not set |
+
+**Tech stack:** Express 5, Mongoose 9, JWT, dotenv, pnpm.
+
+---
+
 ## 🛠️ Tech Stack
 
 | Technology | Used In |
@@ -213,9 +247,11 @@ A standalone project to learn Drizzle ORM fundamentals:
 | **Drizzle ORM** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
 | **PostgreSQL** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
 | **Docker / Docker Compose** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
-| **JWT** (`jsonwebtoken`) | AUTHENTICATION-SESSION |
-| **dotenv** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
-| **pnpm** | AUTHENTICATION-SESSION |
+| **MongoDB** | MongoDB |
+| **Mongoose** (v9) | MongoDB |
+| **JWT** (`jsonwebtoken`) | AUTHENTICATION-SESSION, MongoDB |
+| **dotenv** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1, MongoDB |
+| **pnpm** | AUTHENTICATION-SESSION, MongoDB |
 | **npm** | All other modules |
 
 ---
@@ -226,7 +262,8 @@ A standalone project to learn Drizzle ORM fundamentals:
 
 - [Node.js](https://nodejs.org/) (v18+)
 - [Docker](https://www.docker.com/) (for PostgreSQL-based modules)
-- [pnpm](https://pnpm.io/) (for `AUTHENTICATION-SESSION`)
+- [MongoDB](https://www.mongodb.com/) (for the `MongoDB` module — local or Atlas)
+- [pnpm](https://pnpm.io/) (for `AUTHENTICATION-SESSION` and `MongoDB`)
 
 ### Running a Module
 
@@ -270,7 +307,8 @@ npm start          # or: pnpm start
 7. **Module-4 / BookStoreProject** — Full REST API
 8. **Authentication-01** — Auth fundamentals
 9. **AUTHENTICATION-SESSION** — JWT auth with role-based access
-10. **ExpressWithTypeScript** — Express + TypeScript with MVC architecture
+10. **MongoDB** — MongoDB + Mongoose with JWT auth
+11. **ExpressWithTypeScript** — Express + TypeScript with MVC architecture
 
 ---
 

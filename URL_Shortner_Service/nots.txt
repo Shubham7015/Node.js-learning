@@ -1,5 +1,0 @@
-email : shubhamdev@gmail.com
-password: Shubham2026@gmail.com
-
-  "Status": "Success",
-    "data": "9961e04e-2ef8-409e-a258-1f0cb6ba0c40"

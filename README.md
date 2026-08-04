@@ -24,7 +24,8 @@ Node.js/
 ├── AUTHENTICATION-SESSION/# JWT auth with role-based access, Drizzle ORM & PostgreSQL
 ├── ExpressWithTypeScript/ # Express 5 + TypeScript — Pets API with MVC architecture
 ├── NODE-ORM-1/            # Drizzle ORM basics with PostgreSQL
-└── MongoDB/               # MongoDB + Mongoose — User Auth API with JWT
+├── MongoDB/               # MongoDB + Mongoose — User Auth API with JWT
+└── URL_Shortner_Service/  # URL Shortener — JWT auth, CRUD, nanoid, Zod validation
 ```
 
 ---
@@ -237,21 +238,76 @@ MongoDB/
 
 ---
 
+### `URL_Shortner_Service` — URL Shortener API
+
+A full-featured **URL Shortener** REST API with JWT authentication and complete CRUD operations:
+
+```
+URL_Shortner_Service/
+├── db/
+│   └── index.js                # Database connection (Drizzle + PostgreSQL)
+├── middlewares/
+│   └── auth.middleware.js      # JWT auth middleware & route guard
+├── models/
+│   ├── url.model.js            # URLs table schema
+│   └── user.model.js           # Users table schema
+├── routes/
+│   ├── url.route.js            # URL CRUD endpoints
+│   └── user.route.js           # Signup & login endpoints
+├── services/
+│   ├── url.service.js          # URL database operations
+│   └── user.service.js         # User database operations
+├── utils/
+│   └── token.js                # JWT token creation & validation
+├── validations/
+│   ├── request.validation.js   # Zod request body schemas
+│   └── token.validation.js     # Zod token payload schemas
+├── docker-compose.yml
+├── drizzle.config.js
+└── index.js                    # Express app entry point
+```
+
+#### Endpoints
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/user/signup` | ✗ | Register a new user |
+| `POST` | `/user/login` | ✗ | Login & receive JWT token |
+| `POST` | `/shorten` | ✓ | Create a shortened URL |
+| `GET` | `/codes` | ✓ | List all user's shortened URLs |
+| `PATCH` | `/:id` | ✓ | Update a shortened URL (target URL or short code) |
+| `DELETE` | `/:id` | ✓ | Delete a shortened URL |
+| `GET` | `/:shortcode` | ✗ | Redirect to the original URL |
+
+#### Key Features
+
+- JWT-based authentication with global middleware
+- nanoid-generated short codes (or custom user-provided codes)
+- Partial updates via PATCH (Zod `.refine()` ensures at least one field)
+- Ownership validation — users can only modify/delete their own URLs
+- Strict request validation with Zod 4
+
+**Tech stack:** Express 5, Drizzle ORM, PostgreSQL 17, JWT, nanoid, Zod 4, Docker, pnpm.
+
+---
+
 ## 🛠️ Tech Stack
 
 | Technology | Used In |
-|-----------|---------|
+|-----------|---------| 
 | **Node.js** | All modules |
-| **Express.js** (v5) | Module-4, Authentication-01, AUTHENTICATION-SESSION, ExpressWithTypeScript |
+| **Express.js** (v5) | Module-4, Authentication-01, AUTHENTICATION-SESSION, ExpressWithTypeScript, URL_Shortner_Service |
 | **TypeScript** (v7) | ExpressWithTypeScript |
-| **Drizzle ORM** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
-| **PostgreSQL** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
-| **Docker / Docker Compose** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1 |
+| **Drizzle ORM** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1, URL_Shortner_Service |
+| **PostgreSQL** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1, URL_Shortner_Service |
+| **Docker / Docker Compose** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1, URL_Shortner_Service |
 | **MongoDB** | MongoDB |
 | **Mongoose** (v9) | MongoDB |
-| **JWT** (`jsonwebtoken`) | AUTHENTICATION-SESSION, MongoDB |
-| **dotenv** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1, MongoDB |
-| **pnpm** | AUTHENTICATION-SESSION, MongoDB |
+| **JWT** (`jsonwebtoken`) | AUTHENTICATION-SESSION, MongoDB, URL_Shortner_Service |
+| **Zod** (v4) | URL_Shortner_Service |
+| **nanoid** | URL_Shortner_Service |
+| **dotenv** | BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1, MongoDB, URL_Shortner_Service |
+| **pnpm** | AUTHENTICATION-SESSION, MongoDB, URL_Shortner_Service |
 | **npm** | All other modules |
 
 ---
@@ -263,7 +319,7 @@ MongoDB/
 - [Node.js](https://nodejs.org/) (v18+)
 - [Docker](https://www.docker.com/) (for PostgreSQL-based modules)
 - [MongoDB](https://www.mongodb.com/) (for the `MongoDB` module — local or Atlas)
-- [pnpm](https://pnpm.io/) (for `AUTHENTICATION-SESSION` and `MongoDB`)
+- [pnpm](https://pnpm.io/) (for `AUTHENTICATION-SESSION`, `MongoDB`, and `URL_Shortner_Service`)
 
 ### Running a Module
 
@@ -281,7 +337,7 @@ node index.js
 npm start
 ```
 
-### Database Modules (BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1)
+### Database Modules (BookStoreProject, AUTHENTICATION-SESSION, NODE-ORM-1, URL_Shortner_Service)
 
 ```bash
 # Start PostgreSQL via Docker
@@ -309,6 +365,7 @@ npm start          # or: pnpm start
 9. **AUTHENTICATION-SESSION** — JWT auth with role-based access
 10. **MongoDB** — MongoDB + Mongoose with JWT auth
 11. **ExpressWithTypeScript** — Express + TypeScript with MVC architecture
+12. **URL_Shortner_Service** — Full URL shortener with JWT auth & CRUD
 
 ---
 

@@ -5,7 +5,6 @@ import {
   uuid,
   text,
   timestamp,
-  time,
 } from "drizzle-orm/pg-core";
 
 // User table schema definition for the URL shortener service

@@ -14,3 +14,13 @@ export const createUserToken = async (payload) => {
 
   return token;
 };
+
+export const validateUserToken =  (token) => {
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    return payload;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

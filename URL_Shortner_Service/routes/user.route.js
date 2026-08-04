@@ -1,6 +1,4 @@
 import express from "express";
-import db from "../db/index.js";
-import { usersTable } from "../models/index.js";
 import {
   signupPostRequestBodySchema,
   loginPostRequestBodySchema,
@@ -10,7 +8,6 @@ import {
   getUserByEmail,
   insertUserIntoDatabase,
 } from "../services/user.service.js";
-import "dotenv/config";
 import { createUserToken } from "../utils/token.js";
 
 export const userRouter = express.Router();
@@ -55,7 +52,7 @@ userRouter.post("/login", async (req, res) => {
   const result = await loginPostRequestBodySchema.safeParseAsync(req.body);
 
   if (!result.success) {
-    return res.status(400).json({ error: result.error.flatten().fieldErrors });
+    return res.status(400).json({ error: result.error });
   }
 
   const { email, password } = result.data;

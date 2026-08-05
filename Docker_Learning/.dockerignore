@@ -1,0 +1,32 @@
+# Dependencies (installed inside the container via npm install)
+node_modules/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Notes / docs
+*.md
+*.txt
+*.tldr

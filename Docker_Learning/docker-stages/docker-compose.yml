@@ -1,0 +1,59 @@
+name: login-app
+
+#name of the services wanna use in this project 
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile.new
+    container_name: backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  db:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    # ports:
+    #   - "5431:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # networks:
+    #   - backend
+    #   - frontend
+  
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    # ports:
+    #   - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # networks:
+    #   - frontend
+
+# networks:
+#   frontend:
+#     driver: bridge
+#   backend:
+#     driver: bridge
+volumes:
+  postgres_data:
+  redis_data:

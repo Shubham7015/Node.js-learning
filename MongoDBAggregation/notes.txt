@@ -1,0 +1,491 @@
+
+Mongodb Aggregations
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+//ANCHOR - Question - 4 : Which country has the highest number of required users ? 
+
+{
+    $group: {
+      _id: "$company.location.country",
+      count:{
+        $sum: 1
+      }
+    }
+  },
+  {
+    $sort: {
+      count:-1
+    }
+  },{
+    $limit: 1
+}
+
+
+Output:-
+
+
+{
+  "_id": "Germany",
+  "count": 261
+}
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////!SECTION
+
+
+//ANCHOR - Question - 6 :- List all unique eye colours present in the collection 
+
+{
+    $group: {
+      _id: "$eyeColor",
+    }
+}
+
+Output:- 
+
+{
+  "_id": "brown"
+},
+{
+  "_id" :" "blue"
+},
+{
+  "_id" :"green"
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////!SECTION
+
+
+
+
+//ANCHOR - what is average number of tags per user ? 
+
+[
+
+{
+    $unwind: {
+      path: "$tags",
+    }
+  },{
+    $group: {
+      _id: "$_id",
+      count:{
+        $sum : 1 ,
+      }
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      average:{
+        $avg : "$count"
+      }
+    }
+  }
+]
+
+
+Output:- 
+
+{
+  "_id": null,
+  "average": 3.556
+}
+
+//ANCHOR - ///// Explaination /////
+
+ORIGINAL DATA
+──────────────────────────────
+
+Document 1
+tags: [A, B, C]
+
+Document 2
+tags: [A, B]
+
+Document 3
+tags: [A, B, C, D]
+
+
+             │
+             │ $unwind
+             ▼
+
+9 individual documents
+──────────────────────────────
+
+_id: 1 → A
+_id: 1 → B
+_id: 1 → C
+
+_id: 2 → A
+_id: 2 → B
+
+_id: 3 → A
+_id: 3 → B
+_id: 3 → C
+_id: 3 → D
+
+
+             │
+             │ $group by _id
+             │ $sum: 1
+             ▼
+
+3 documents
+──────────────────────────────
+
+_id: 1 → count: 3
+_id: 2 → count: 2
+_id: 3 → count: 4
+
+
+             │
+             │ $group by null
+             │ $avg: "$count"
+             ▼
+
+1 document
+──────────────────────────────
+
+{
+    _id: null,
+    averag: 3
+}
+
+
+
+
+///////// Another method to do this ////////////////////////////////
+
+{
+    $group: {
+      _id: null,
+    	average:{
+        $avg: {
+          $size: "$tags"
+        }
+      }
+    }
+  }
+
+
+////////////////////// Another method to do this //////////////////////////////////
+
+{
+    $addFields: {
+      numberOfTags: {
+        $size: { $ifNull: ["$tags", []] }
+      }
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      averageNumberofTags: {
+        $avg: "$numberOfTags"
+      }
+    }
+  }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Question:7 :- How many users have 'enim' as there one of tag ? 
+
+[
+  {
+    $match: {
+      tags: "enim" // match the document which have "enim" in tag(Array)
+    }
+  },
+  {
+    $count: "toal_enim_count" // count how many are there 
+  }
+]
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////!SECTION
+
+//ANCHOR - Question:8 :-  What are the name and age of users who are inactive and 'velit' as tag ? 
+
+[
+  {
+    $match: {
+      isActive :false,
+    }
+  },
+  {
+    $project: {// project only specify properties of the documents
+      name:1,
+      age:1,
+    }
+  }
+]
+
+
+
+Output : - 
+
+
+
+_id
+6a79cb238a01ca4b837cdf13
+name
+"Leila Cervantes"
+age
+40
+
+_id
+6a79cb238a01ca4b837cdf2b
+name
+"Milagros Levy"
+age
+33
+
+_id
+6a79cb238a01ca4b837cdf2d
+name
+"Gracie Ramirez"
+age
+24
+
+
+_id
+6a79cb238a01ca4b837cdf32
+name
+"Deanna Sweeney"
+age
+38
+
+
+_id
+6a79cb238a01ca4b837cdf76
+name
+"Leach Kennedy"
+age
+35
+
+
+_id
+6a79cb238a01ca4b837cdfa9
+name
+"Clemons Hurst"
+age
+26
+
+
+_id
+6a79cb238a01ca4b837cdfaf
+name
+"Rosario Navarro"
+age
+22
+
+
+_id
+6a79cb238a01ca4b837cdfbc
+name
+"Moran Le"
+age
+21
+
+
+_id
+6a79cb238a01ca4b837cdff3
+name
+"Selma Ingram"
+age
+31
+
+
+_id
+6a79cb238a01ca4b837ce002
+name
+"Letha Alford"
+age
+39
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////!SECTION
+
+
+//ANCHOR - Question : 9:- How many users have phone number starting with '+1 (940)' ? 
+
+[
+  {
+    $match: {
+      "company.phone": /^\+1 \(940\)/ // handling regex expression 
+    }
+  },
+  {
+    $count: 'total'
+  }
+  
+]
+
+
+////////////////////Another method///////////////////////////////////
+
+[
+  {
+    $match: {
+      "company.phone": {
+        $regex:/^\+1 \(940\)/
+      }
+    }
+  },
+  {
+    $count: 'total'
+  }
+  
+]
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////!SECTION
+
+//ANCHOR - Question: 10 : -  Who as registered recently ? 
+
+[
+  {
+    $sort: {
+      registered:-1
+    }
+  },
+
+  {
+    $project: {
+      name:1,
+      age:1,
+      registered:1
+    }
+  },
+{
+  $limit: 4
+}
+]
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//ANCHOR - Question: 11 :- Categorize users by favourite fruit ? 
+
+[
+ {
+   $group: {
+     _id: "$favoriteFruit",
+     users : {$push:"$name"}// push the names of users which have partucular fruit as their favourite fruit and type of users will be aaray 
+   }
+ } 
+]
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////!SECTION
+
+
+//ANCHOR - Question : 12 :- How many users have 'ad' as there second tag in the tag Array
+
+[
+  {
+    $match: {
+      "tags.1":'ad'
+    }
+  },
+  {
+    $count: 'total_count'
+  }
+]
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//ANCHOR - Question: 13 : - How many users have 'id' and 'enim' as tag in the tags array ? 
+
+[
+  {
+    $match: {
+      "tags":{$all:['enim','id']} //
+    }
+  }
+]
+
+
+
+//ANCHOR - Question:14:- List all the companies which are located in the USA with there corresponding user count ? 
+
+[
+  {
+    $match: {
+      "company.location.country" : "USA"
+    }
+  },
+  {
+    $group: {
+      _id: "$company.title",
+      Users: {
+       $sum: 1
+      }
+    }
+  }
+]
+
+//ANCHOR - Question:15:- lookup in authorstable 
+
+
+
+[{
+  $lookup: {
+    from: "authors",
+    localField: "author_id",
+    foreignField: "_id",
+    as: "author_details"
+  }
+},
+ {
+   $addFields: {
+     author_details: {
+       $first : "$author_details"
+     }
+   }
+ }
+
+]
+
+
+///////////////////////////////////Another method///////////////////////////////////////////////
+
+Using ---- >  $arrayElemAt
+
+
+[{
+  $lookup: {
+    from: "authors",
+    localField: "author_id",
+    foreignField: "_id",
+    as: "author_details"
+  }
+},
+ {
+   $addFields: {
+     author_details: {
+     	$arrayElemAt : ["$author_details",0] -----> 1st parameter is array on which we wanna do operation and second one is index on which index in the array
+     }
+   }
+ }
+]
+
+
+
+
+
+

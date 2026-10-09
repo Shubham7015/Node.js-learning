@@ -1,16 +1,26 @@
-import express, { type Request, type Response } from "express";
+import dotenv from "dotenv";
+import app from  "./app.js"
+import connectDB from "./db/connection.js";
+import dns from 'dns';
 
-const app = express();
-const PORT = 3000;
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
-// Middleware
-app.use(express.json());
-
-// Routes
-app.get("/", (_req: Request, res: Response) => {
-  res.json({ message: "Hello from Express + TypeScript! 🚀" });
+dotenv.config({
+  path: "./.env",
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+const port :number  = Number(process.env.PORT || 8000)
+
+
+connectDB()
+      .then(()=>{
+        app.listen(port,()=>{
+          console.log(`App is running on port ${port}`)
+        })
+      })
+      .catch((err)=>{
+        console.error("MongoDB connection error",err)
+        process.exit(1) 
+      })
+
